@@ -1,13 +1,3 @@
-"""
-Smart Study Planner
-====================
-A console-based program that helps a student log, review and analyse
-study sessions across different subjects over the course of a semester.
-
-All session data is saved to a plain text file (study_log.txt) so that
-the program keeps working correctly across multiple runs.
-"""
-
 import os
 
 # The file used to persist session data between runs.
@@ -18,18 +8,8 @@ DATA_FILE = "study_log.txt"
 # legitimately contain commas.
 FIELD_SEPARATOR = "|"
 
-
-# ---------------------------------------------------------------------
 # Part (c): classify_session
-# ---------------------------------------------------------------------
 def classify_session(duration):
-    """
-    Classify a study session based on its duration in minutes.
-
-    Short  : under 30 minutes
-    Medium : 30 to 90 minutes (inclusive)
-    Long   : over 90 minutes
-    """
     if duration < 30:
         return "Short"
     elif duration <= 90:
@@ -37,17 +17,8 @@ def classify_session(duration):
     else:
         return "Long"
 
-
-# ---------------------------------------------------------------------
 # Part (g): save_sessions / load_sessions
-# ---------------------------------------------------------------------
 def load_sessions():
-    """
-    Load previously saved sessions from DATA_FILE into a list of
-    dictionaries. If the file does not exist yet (e.g. the very first
-    run of the program), simply return an empty list instead of
-    crashing.
-    """
     sessions = []
 
     # Guard against the file not existing on the first ever run.
@@ -89,10 +60,6 @@ def load_sessions():
 
 
 def save_sessions(sessions):
-    """
-    Save every logged session to DATA_FILE, one session per line,
-    using FIELD_SEPARATOR to separate the fields.
-    """
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             for session in sessions:
@@ -107,15 +74,8 @@ def save_sessions(sessions):
     except OSError as error:
         print(f"Error: could not save sessions ({error}).")
 
-
-# ---------------------------------------------------------------------
 # Part (b): add_session
-# ---------------------------------------------------------------------
 def get_valid_duration():
-    """
-    Repeatedly prompt the user for a session duration (in minutes)
-    until a valid positive number is entered.
-    """
     while True:
         raw_value = input("Duration in minutes: ").strip()
         try:
@@ -132,11 +92,6 @@ def get_valid_duration():
 
 
 def add_session(sessions):
-    """
-    Prompt the user for the details of a study session (subject,
-    topic, date/day label, duration) and append it to the sessions
-    list as a dictionary.
-    """
     print("\n--- Add a Study Session ---")
     subject = input("Subject: ").strip()
     topic = input("Topic covered: ").strip()
@@ -153,16 +108,8 @@ def add_session(sessions):
     print(f"Session added: {subject} ({classify_session(duration)}, "
           f"{duration:g} min).")
 
-
-# ---------------------------------------------------------------------
 # Part (d): view_sessions
-# ---------------------------------------------------------------------
 def print_session_table(sessions):
-    """
-    Print a list of session dictionaries as a neatly formatted table.
-    Reused by view_sessions() and search_by_subject() so the table
-    layout stays consistent throughout the program.
-    """
     # Column widths chosen to comfortably fit typical entries.
     header = (f"{'Subject':<15}{'Topic':<20}{'Date':<15}"
               f"{'Duration (min)':<16}{'Classification':<14}")
@@ -185,17 +132,8 @@ def view_sessions(sessions):
         return
 
     print_session_table(sessions)
-
-
-# ---------------------------------------------------------------------
 # Part (e): search_by_subject
-# ---------------------------------------------------------------------
 def search_by_subject(sessions):
-    """
-    Ask the user for a subject name and display only the sessions
-    recorded for that subject (case-insensitive match), along with
-    the total time spent on it.
-    """
     print("\n--- Search Sessions by Subject ---")
     query = input("Enter subject to search for: ").strip()
 
@@ -211,18 +149,8 @@ def search_by_subject(sessions):
     print(f"\nTotal time spent on '{query}': {total_minutes:g} minutes "
           f"({total_minutes / 60:.2f} hours).")
 
-
-# ---------------------------------------------------------------------
 # Part (f): study_statistics
-# ---------------------------------------------------------------------
 def study_statistics(sessions):
-    """
-    Compute and display:
-      - total hours studied overall
-      - total hours studied per subject
-      - the subject with the least total study time (weakest area)
-      - the single longest session recorded
-    """
     print("\n--- Study Statistics ---")
     if not sessions:
         print("No sessions have been logged yet, so no statistics are "
@@ -253,11 +181,7 @@ def study_statistics(sessions):
           f"{longest_session['topic']} on {longest_session['date']} "
           f"({longest_session['duration']:g} minutes, "
           f"{classify_session(longest_session['duration'])})")
-
-
-# ---------------------------------------------------------------------
 # Part (a): main menu
-# ---------------------------------------------------------------------
 def display_menu():
     """Print the main menu options."""
     print("\n===== Smart Study Planner =====")
@@ -269,12 +193,6 @@ def display_menu():
 
 
 def main():
-    """
-    Main program loop. Loads any existing sessions on start-up,
-    repeatedly displays the menu and dispatches to the relevant
-    function based on the user's choice, and rejects invalid choices
-    without crashing.
-    """
     sessions = load_sessions()
     if sessions:
         print(f"Loaded {len(sessions)} session(s) from '{DATA_FILE}'.")
