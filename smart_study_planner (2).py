@@ -16,7 +16,6 @@ def classify_session(duration):
         return "Medium"
     else:
         return "Long"
-
 # Part (g): save_sessions / load_sessions
 def load_sessions():
     sessions = []
@@ -58,8 +57,8 @@ def load_sessions():
 
     return sessions
 
-
 def save_sessions(sessions):
+
     try:
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             for session in sessions:
@@ -73,7 +72,6 @@ def save_sessions(sessions):
         print(f"Saved {len(sessions)} session(s) to '{DATA_FILE}'.")
     except OSError as error:
         print(f"Error: could not save sessions ({error}).")
-
 # Part (b): add_session
 def get_valid_duration():
     while True:
@@ -81,22 +79,36 @@ def get_valid_duration():
         try:
             duration = float(raw_value)
         except ValueError:
-            print("Please enter a valid number for the duration.")
+            print("x Invalid input. Please enter a valid number for duration.")
             continue
 
         if duration <= 0:
-            print("Duration must be a positive number. Please try again.")
+            print("x Duration must be a positive number. Please try again.")
             continue
+        break 
 
         return duration
 
 
 def add_session(sessions):
-    print("\n--- Add a Study Session ---")
-    subject = input("Subject: ").strip()
-    topic = input("Topic covered: ").strip()
-    date = input("Date / day (e.g. 2026-09-04 or 'Monday'): ").strip()
-    duration = get_valid_duration()
+    print("\n" + "=* 60")
+    print("add new study session")
+    print("="*60)
+
+    subject = input("Subject name(programming fundamentals)").strip()
+    if not subject :
+        print("x subject name cannot be empty.")
+        return
+    topic = input("Topic covered (cyber professionas):").strip()
+    if not topic:
+        print("x topic cannot be empty.")
+        return
+
+    date = input("2026-09-06 or 'Sunday'): ").strip()
+    if not date:
+        print("x date/day cannot be empty.")
+        return
+    duration = int(input("Entrt duration in minutes: "))
 
     session = {
         "subject": subject,
@@ -112,7 +124,7 @@ def add_session(sessions):
 def print_session_table(sessions):
     # Column widths chosen to comfortably fit typical entries.
     header = (f"{'Subject':<15}{'Topic':<20}{'Date':<15}"
-              f"{'Duration (min)':<16}{'Classification':<14}")
+              f"{'Duration (min)':<16}...{'Classification':<14}")
     print(header)
     print("-" * len(header))
 
@@ -174,14 +186,16 @@ def study_statistics(sessions):
     weakest_subject = min(subject_totals, key=subject_totals.get)
     print(f"\nWeakest area (least total study time): {weakest_subject} "
           f"({subject_totals[weakest_subject] / 60:.2f} hours)")
-
-    # The single longest session, found by comparing durations.
     longest_session = max(sessions, key=lambda s: s["duration"])
     print(f"\nLongest single session: {longest_session['subject']} - "
           f"{longest_session['topic']} on {longest_session['date']} "
           f"({longest_session['duration']:g} minutes, "
           f"{classify_session(longest_session['duration'])})")
+
+
+# ---------------------------------------------------------------------
 # Part (a): main menu
+# ---------------------------------------------------------------------
 def display_menu():
     """Print the main menu options."""
     print("\n===== Smart Study Planner =====")
@@ -219,4 +233,6 @@ def main():
 
 
 if __name__ == "__main__":
+    #lood any existing sessions from file at startup 
+    # Run the main program 
     main()
